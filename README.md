@@ -92,24 +92,13 @@ absolute path is an identifier.
 
 ## Cross-references into the main paper
 
-The page body is generated from the journal-length `supplementary.tex`, whose `\ref`s
-resolve against the 16-page manuscript. The 8-page ICRA paper numbers its floats
-differently, so `tools/build.py` output must be remapped after every regeneration:
+The page body is generated from `supplementary.tex`, whose `MAIN-` prefixed `\ref`s point
+into the main paper. `tools/build.py` resolves them against `ICRA/icra8/greg_icra8.aux`, so
+the numbers on the page always match the 8-page ICRA build and no manual remapping is
+needed. Set `GREG_MAIN_AUX` to resolve against a different build of the paper.
 
-| Page says | ICRA paper |
-| --- | --- |
-| Fig. 2 (training curves, batch size) | Fig. 3 |
-| Eq. 9 (critic targets) | Eq. 3 |
-| Eq. 10 (blend weight) | Eq. 8 |
-| Eq. 4 (critic loss) | no numbered equation; state it in prose |
-| Sec. 3.3 / 3.4 | Sec. III-C / III-D |
-| Table 2 (multi-ability) | Table I |
-| Table 4 (reward comparison) | Table III(b) |
-| Table 6 (HUGSIM) | Table II(a) |
-| Tables 7, 8 (BlackOut) | Table II(b) |
-| Table 9 (Agility) | Table II(c) |
-| Table 5 (Town05 Short), Table 10 (BDD-X) | not in the paper; do not cite it as such |
-| Fig. 3 (corrupted observations) | not in the paper |
+Build the paper first: a stale or missing `.aux` leaves the numbers unresolved, and
+`tools/build.py` reports them at the end of its run.
 
 Check for regressions with:
 
