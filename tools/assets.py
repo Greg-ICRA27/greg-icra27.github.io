@@ -15,6 +15,7 @@ EXTRA = ['figures/Greg.pdf', 'figures/Overview.pdf', 'figures/model.pdf']
 # the submitted PDF.
 OVERRIDE = {
     'figures/Greg.pdf': ('ICRA/icra8/figures/Greg_with_MVE.pdf', '0.5cm 2.0cm 2.7cm 2.2cm'),
+    'figures/blackout.pdf': ('figures/blackout.pdf', '3.1cm 0.0cm 8.3cm 0.0cm'),
 }
 
 def resolve(p):
