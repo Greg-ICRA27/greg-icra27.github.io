@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Convert sections/supplementary.tex into the HTML body of the project page."""
-import re, os, sys, json, html
+import unicodedata, re, os, sys, json, html
 
 PAPER = os.environ.get('GREG_PAPER_DIR', '../GREG_paper')
 OUT = os.path.dirname(os.path.abspath(__file__))
@@ -151,6 +151,23 @@ def ref_html(label):
         return '<a href="#%s">%s</a>' % (anchor, disp)
     return '<a href="#%s">%s</a>' % (label, '?')
 
+# LaTeX accent commands -> precomposed Unicode. Bare forms are limited to the
+# punctuation accents, which cannot be confused with a control word; the letter
+# forms (c, v, u, H) must brace their argument for the same reason.
+COMBINING = {'"': '\u0308', "'": '\u0301', '`': '\u0300', '^': '\u0302',
+             '~': '\u0303', '=': '\u0304', '.': '\u0307',
+             'c': '\u0327', 'v': '\u030c', 'u': '\u0306', 'H': '\u030b'}
+ACCENT_RE = re.compile(r'\{?\\(?:(?P<p>["\'`^~=.])\s*\{?(?P<pl>[A-Za-z])\}?'
+                       r'|(?P<w>[cvuH])(?:\{(?P<wl>[A-Za-z])\}|\s+(?P<wl2>[A-Za-z])))\}?')
+
+def accents(t):
+    def rep(m):
+        a = m.group('p') or m.group('w')
+        c = m.group('pl') or m.group('wl') or m.group('wl2')
+        return unicodedata.normalize('NFC', c + COMBINING[a])
+    return ACCENT_RE.sub(rep, t)
+
+
 def inline(t, allow_cite=True):
     store = []
     t = protect_math(t, store)
@@ -196,10 +213,9 @@ def inline(t, allow_cite=True):
     t = t.replace('\\$', '$').replace('\\#', '#')
     t = t.replace('``', '&ldquo;').replace("''", '&rdquo;')
     t = re.sub(r'\\times\b', '&times;', t)
+    t = accents(t)
     t = t.replace('~', '\u00a0')
     t = re.sub(r'\\\\', ' ', t)
-    t = re.sub(r'\{\\\'e\}|\\\'\{e\}|\\\'e', '&eacute;', t)
-    t = re.sub(r'\{\\"o\}|\\"\{o\}|\\"o', '&ouml;', t)
     t = re.sub(r'\{\\L\}|\\L\b', '\u0141', t)
     t = re.sub(r'\{\\o\}|\\o\b', '\u00f8', t)
     t = t.replace('---', '&mdash;').replace('--', '&ndash;')

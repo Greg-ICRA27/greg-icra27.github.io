@@ -234,9 +234,9 @@ reacting, and demonstrations of clean driving contain no examples of that.</p>
 <section id="code">
   <div class="wrap">
     <h2>Code</h2>
-    <p>The full training and evaluation code &mdash; imitation pre-training, the distributed
-    reinforcement fine-tuning trainer and workers, and the Bench2Drive, HUGSIM, BlackOut and
-    Agility evaluation harnesses &mdash; is available as a single archive. No path, host, or account is hard-coded: every machine-specific value is read from the
+    <p>The full training and evaluation code is available as a single archive: imitation
+    pre-training, the distributed reinforcement fine-tuning trainer and workers, and the
+    Bench2Drive, HUGSIM, BlackOut and Agility evaluation harnesses. No path, host, or account is hard-coded: every machine-specific value is read from the
     environment, so a fresh checkout runs unmodified. Copy the <code>.env.example</code> files
     and fill them in; see the per-directory <code>README.md</code> files for setup.</p>
     <p><a class="btn" href="static/code/greg_code.zip">&#128187; Download code (ZIP, {zipmb}&nbsp;MB)</a></p>
